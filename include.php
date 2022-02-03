@@ -18,7 +18,7 @@ if (!function_exists('display_blog_menu')) {
 		//get link to the page
 		$query = "SELECT `link` FROM `" .TABLE_PREFIX ."pages` WHERE `page_id`=$page_id;";
 		$result = $database->query($query);
-		if($result->numRows() > 0){
+		if(is_object($result) && $result->numRows() > 0){
 			$link = $result->fetchRow();
             $page_link = $link['link'];
 		}
@@ -26,7 +26,7 @@ if (!function_exists('display_blog_menu')) {
 		// get NWI Section
 		$query = "SELECT `section_id` FROM `".TABLE_PREFIX."sections` WHERE `page_id`=$page_id AND `module`='news_img'";
 		$result = $database->query($query);
-		if($result->numRows() > 0){
+		if(is_object($result) && $result->numRows() > 0){
 			$section_id_array = $result->fetchRow();
             $section_id = $section_id_array['section_id'];
 		}
@@ -73,7 +73,7 @@ if (!function_exists('display_blog_menu')) {
 	        //query to obtain history per month for the selected page
 	        $query = "SELECT MONTHNAME(FROM_UNIXTIME(".$date.")) as mo,MONTH(FROM_UNIXTIME(".$date.")) as m,FROM_UNIXTIME(".$date.",'%Y') as y,COUNT(*) as total FROM `" .TABLE_PREFIX ."mod_news_img_posts` WHERE `section_id`=$section_id AND `active`=true GROUP BY y,m ORDER BY y DESC,m DESC;";
 	        $result = $database->query($query);
-			if($result->numRows() > 0){
+			if(is_object($result) && $result->numRows() > 0){
 				if ($history_header != "") {
 					echo $history_header;
 				}
