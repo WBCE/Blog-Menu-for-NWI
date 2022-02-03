@@ -16,7 +16,7 @@ if (!function_exists('display_blog_menu')) {
 		global $database;
 
 		//get link to the page
-		$query = "SELECT `link` FROM " .TABLE_PREFIX ."pages WHERE `page_id`=$page_id;";
+		$query = "SELECT `link` FROM `" .TABLE_PREFIX ."pages` WHERE `page_id`=$page_id;";
 		$result = $database->query($query);
 		if($result->numRows() > 0){
 			$link = $result->fetchRow();
@@ -24,7 +24,7 @@ if (!function_exists('display_blog_menu')) {
 		}
 		
 		// get NWI Section
-		$query = "SELECT `section_id` FROM ".TABLE_PREFIX."sections WHERE `page_id`=$page_id AND `module`='news_img'";
+		$query = "SELECT `section_id` FROM `".TABLE_PREFIX."sections` WHERE `page_id`=$page_id AND `module`='news_img'";
 		$result = $database->query($query);
 		if($result->numRows() > 0){
 			$section_id_array = $result->fetchRow();
@@ -37,18 +37,18 @@ if (!function_exists('display_blog_menu')) {
 		if($display_option==0 or $display_option==2){ //show categories
 
 			// query to obtain categories for the selected page
-	  		$query = "SELECT * FROM " .TABLE_PREFIX ."mod_news_img_groups WHERE section_id=$section_id AND active=true;";
+	  		$query = "SELECT * FROM `" .TABLE_PREFIX ."mod_news_img_groups` WHERE `section_id`=$section_id AND `active`=true;";
 
 			// make database query and obtain active groups and amount of posts per group
 			$result = $database->query($query);
-			if($result->numRows() > 0){
+			if(is_object($result) && $result->numRows() > 0){
 				if ($group_header != "") {
 					echo $group_header;
 				}
 				$output = "";
 				while($group = $result->fetchRow()){
 	                $id = $group['group_id'];
-					$query_detail = "SELECT * FROM " .TABLE_PREFIX ."mod_news_img_posts WHERE section_id=$section_id AND active=true AND group_id=$id;";
+					$query_detail = "SELECT * FROM `" .TABLE_PREFIX ."mod_news_img_posts` WHERE `section_id`=$section_id AND `active`=true AND `group_id`=$id;";
 					$detail_result = $database->query($query_detail);
 					$num = $detail_result->numRows();
 					$output .=	"<li><a href=\"" .WB_URL.PAGES_DIRECTORY .$page_link .PAGE_EXTENSION ."?g=".$group['group_id']."\">" .$group['title'] ."</a> (".$num.")</li>\n";
@@ -71,7 +71,7 @@ if (!function_exists('display_blog_menu')) {
 
 	        $output ="";
 	        //query to obtain history per month for the selected page
-	        $query = "SELECT MONTHNAME(FROM_UNIXTIME(".$date.")) as mo,MONTH(FROM_UNIXTIME(".$date.")) as m,FROM_UNIXTIME(".$date.",'%Y') as y,COUNT(*) as total FROM " .TABLE_PREFIX ."mod_news_img_posts WHERE section_id=$section_id AND active=true GROUP BY y,m ORDER BY y DESC,m DESC;";
+	        $query = "SELECT MONTHNAME(FROM_UNIXTIME(".$date.")) as mo,MONTH(FROM_UNIXTIME(".$date.")) as m,FROM_UNIXTIME(".$date.",'%Y') as y,COUNT(*) as total FROM `" .TABLE_PREFIX ."mod_news_img_posts` WHERE `section_id`=$section_id AND `active`=true GROUP BY y,m ORDER BY y DESC,m DESC;";
 	        $result = $database->query($query);
 			if($result->numRows() > 0){
 				if ($history_header != "") {
