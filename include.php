@@ -3,7 +3,7 @@
  -----------------------------------------------------------------------------------------
   Code snippet BlogMenu 
   Licencsed under GNU, written by Erik Coenjaerts (Eki)
-  portet for NwI by florian
+  ported for NwI by florian
  -----------------------------------------------------------------------------------------
 */
 
@@ -33,19 +33,19 @@ if (!function_exists('display_blog_menu')) {
 		
 		// convert all numeric inputs to integer variables
 		$page_id = (int) $page_id;
-
+		$output = "";
 		if($display_option==0 or $display_option==2){ //show categories
 
 			// query to obtain categories for the selected page
 	  		$query = "SELECT * FROM `" .TABLE_PREFIX ."mod_news_img_groups` WHERE `section_id`=$section_id AND `active`=true;";
-
+			
 			// make database query and obtain active groups and amount of posts per group
 			$result = $database->query($query);
 			if(is_object($result) && $result->numRows() > 0){
 				if ($group_header != "") {
 					echo $group_header;
 				}
-				$output = "";
+				
 				while($group = $result->fetchRow()){
 	                $id = $group['group_id'];
 					$query_detail = "SELECT * FROM `" .TABLE_PREFIX ."mod_news_img_posts` WHERE `section_id`=$section_id AND `active`=true AND `group_id`=$id;";
@@ -69,7 +69,7 @@ if (!function_exists('display_blog_menu')) {
 	                break;
 	        }
 
-	        $output ="";
+	       
 	        //query to obtain history per month for the selected page
 	        $query = "SELECT MONTHNAME(FROM_UNIXTIME(".$date.")) as mo,MONTH(FROM_UNIXTIME(".$date.")) as m,FROM_UNIXTIME(".$date.",'%Y') as y,COUNT(*) as total FROM `" .TABLE_PREFIX ."mod_news_img_posts` WHERE `section_id`=$section_id AND `active`=true GROUP BY y,m ORDER BY y DESC,m DESC;";
 	        $result = $database->query($query);
@@ -83,7 +83,7 @@ if (!function_exists('display_blog_menu')) {
 						'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
 						'1st','2nd','3rd','4th','5th','6th', '7th', '8th', '9th', '0th'  );
 						$array_2 = array ( 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag',
-						'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
+						'Januar', 'Februar', 'MÃ¤rz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
 						'1.', '2.', '3.', '4.', '5.', '6.', '7.', '8.', '9.', '0.'
 						 );
 
@@ -95,7 +95,7 @@ if (!function_exists('display_blog_menu')) {
 	                $output .= "<li><a href=\"" .WB_URL.PAGES_DIRECTORY .$page_link .PAGE_EXTENSION ."?y=".$history['y']."&m=".$history['m']."&method=".$date_option."\">" .$history['mo']." ".$history['y']."</a> (".$history['total'].")</li>\n";
 	            	}
 	        	}
-			$output = LANGUAGE."<ul>".$output."</ul>";
+			$output = "<span class=\"nwi_blogmenu_language\">".LANGUAGE."</span><ul>".$output."</ul>";
 	        echo $output;
 		}
 
