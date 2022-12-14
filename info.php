@@ -2,7 +2,7 @@
 $module_directory     = 'news_img_blog_menu';
 $module_name          = 'Blog Menu for News with Images';
 $module_function      = 'snippet';
-$module_version       = '0.2';
+$module_version       = '0.3';
 $module_platform      = '1.4';
 $module_author        = 'Erik Coenjaerts, florian';
 $module_license       = 'GNU General Public License';

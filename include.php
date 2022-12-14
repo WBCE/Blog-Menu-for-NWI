@@ -3,7 +3,7 @@
  -----------------------------------------------------------------------------------------
   Code snippet BlogMenu 
   Licencsed under GNU, written by Erik Coenjaerts (Eki)
-  ported for NwI by florian
+  portet for NwI by florian
  -----------------------------------------------------------------------------------------
 */
 
@@ -37,23 +37,22 @@ if (!function_exists('display_blog_menu')) {
 		if($display_option==0 or $display_option==2){ //show categories
 
 			// query to obtain categories for the selected page
-	  		$query = "SELECT * FROM `" .TABLE_PREFIX ."mod_news_img_groups` WHERE `section_id`=$section_id AND `active`=true;";
-			
+	  		$query = "SELECT * FROM `" .TABLE_PREFIX ."mod_news_img_groups` WHERE `section_id`=$section_id";
+
 			// make database query and obtain active groups and amount of posts per group
 			$result = $database->query($query);
 			if(is_object($result) && $result->numRows() > 0){
 				if ($group_header != "") {
 					echo $group_header;
-				}
-				
+				}				
 				while($group = $result->fetchRow()){
 	                $id = $group['group_id'];
-					$query_detail = "SELECT * FROM `" .TABLE_PREFIX ."mod_news_img_posts` WHERE `section_id`=$section_id AND `active`=true AND `group_id`=$id;";
+					$query_detail = "SELECT * FROM `" .TABLE_PREFIX ."mod_news_img_posts` WHERE `section_id`=$section_id AND `active`=1 AND `group_id`=$id;";
 					$detail_result = $database->query($query_detail);
 					$num = $detail_result->numRows();
 					$output .=	"<li><a href=\"" .WB_URL.PAGES_DIRECTORY .$page_link .PAGE_EXTENSION ."?g=".$group['group_id']."\">" .$group['title'] ."</a> (".$num.")</li>\n";
 	      		}
-			}
+			}			
 			$output = "<ul>".$output."</ul>";
 	        echo $output;
 		}
@@ -69,7 +68,7 @@ if (!function_exists('display_blog_menu')) {
 	                break;
 	        }
 
-	       
+			$output = "";
 	        //query to obtain history per month for the selected page
 	        $query = "SELECT MONTHNAME(FROM_UNIXTIME(".$date.")) as mo,MONTH(FROM_UNIXTIME(".$date.")) as m,FROM_UNIXTIME(".$date.",'%Y') as y,COUNT(*) as total FROM `" .TABLE_PREFIX ."mod_news_img_posts` WHERE `section_id`=$section_id AND `active`=true GROUP BY y,m ORDER BY y DESC,m DESC;";
 	        $result = $database->query($query);
@@ -95,7 +94,7 @@ if (!function_exists('display_blog_menu')) {
 	                $output .= "<li><a href=\"" .WB_URL.PAGES_DIRECTORY .$page_link .PAGE_EXTENSION ."?y=".$history['y']."&m=".$history['m']."&method=".$date_option."\">" .$history['mo']." ".$history['y']."</a> (".$history['total'].")</li>\n";
 	            	}
 	        	}
-			$output = "<span class=\"nwi_blogmenu_language\">".LANGUAGE."</span><ul>".$output."</ul>";
+			$output = "<ul>".$output."</ul>";
 	        echo $output;
 		}
 
